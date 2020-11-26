@@ -1,0 +1,29 @@
+version: "2.1"
+services:
+  app:
+    build: .
+    env_file: .env
+    ports:
+      - "7777:7777"
+    volumes:
+      - ./:/app/
+    links:
+      - mysql
+    command: npm run start:dev
+    network_mode: bridge
+
+  mysql:
+    image: mysql:5.6
+    env_file: .env
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./db-scripts:/docker-entrypoint-initdb.d
+    network_mode: bridge
+
+  redis:
+    image: redis:alpine
+    hostname: redis
+    ports:
+      - "6379:6379"
+    network_mode: bridge
